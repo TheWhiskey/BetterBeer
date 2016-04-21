@@ -5,6 +5,7 @@
         {
                 parent::__construct();
                 $this->load->model('rating_model');
+				$this->load->model('beer_model');
                 $this->load->helper('url_helper');
         }
 	public function index()
@@ -43,10 +44,14 @@
 			{
 			redirect('auth/login');
 			}
-
+			
+			$data['beer'] = $this->beer_model->get_beer();
+			
+			$user = $this->ion_auth->user()->row();
+			$data['user_name'] = $user->username;
+			
 			$data['title'] = 'Rate a beer';
 
-			$this->form_validation->set_rules('user_id', 'User Id', 'required');
 			$this->form_validation->set_rules('beer_id', 'Beer Id', 'required');
 			$this->form_validation->set_rules('rating', 'Rating', 'required|integer|greater_than[0]|less_than_equal_to[5]');
 			
